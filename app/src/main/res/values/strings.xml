@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Memory Word</string>
+    <string name="nav_drawer_menu">Navigation Drawer Menu</string>
+    <string name="home">Home</string>
+    <string name="addWord">Add Word</string>
+    <string name="cats">Cats</string>
+    <string name="login">Login</string>
+    <string name="Help">Help</string>
+    <string name="Feedback">Feedback</string>
+    <string name="word_list">Word list</string>
+    <string name="practice">Practice</string>
+    <string name="languageSelection">Language Selection</string>
+    <string name="help_info">Help information</string>
+    <string name="multipleChoice">Multiple Choice Practice</string>
+    <string name="flashCard">Flash Card Practice</string>
+    <string name="want_to_learn_language">Language you want to learn</string>
+    <string name="native_language">Language you know\n(usually your native language)</string>
+    <string name="continue_button">Continue</string>
+</resources>
