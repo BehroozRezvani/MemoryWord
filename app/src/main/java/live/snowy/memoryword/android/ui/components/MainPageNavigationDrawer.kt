@@ -62,14 +62,7 @@ fun MainPageNavigationDrawer(
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                 ) {
-                    Image(
-                        modifier = Modifier
-                            .size(200.dp)
-                            .padding(bottom = 16.dp, top = 16.dp),
-                        painter = painterResource(if (isSystemInDarkTheme()) R.drawable.logo_dark else R.drawable.logo),
-                        contentDescription = stringResource(id = R.string.app_name),
-                        contentScale = ContentScale.Fit,
-                    )
+                    Logo()
                     items.forEachIndexed { index, item ->
                         NavigationDrawerItem(
                             icon = {

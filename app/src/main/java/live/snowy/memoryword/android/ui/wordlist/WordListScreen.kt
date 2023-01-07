@@ -1,6 +1,7 @@
 package live.snowy.memoryword.android.ui.wordlist
 
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -86,6 +87,7 @@ fun WordListScreen(
 
 
 @Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES, backgroundColor = 0xFF1C1B1F, showBackground = true)
 @Composable
 fun WordListScreenPreview() {
     MemoryWordTheme(dynamicColor = false) {

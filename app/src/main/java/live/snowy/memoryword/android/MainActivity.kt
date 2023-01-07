@@ -51,7 +51,7 @@ private fun BuildNavigationGraph() {
     val chosenLanguageTo = "French"
     val databaseName = remember { mutableStateOf(chosenLanguageFrom + "_" + chosenLanguageTo) }
 
-    NavHost(navController = navController, startDestination = Screen.ChoosePractice.route) {
+    NavHost(navController = navController, startDestination = Screen.OnBoarding.route) {
         /*composable(
             Screen.WordList.route,
             arguments = listOf(navArgument(Screen.WordList.argument){ type = NavType.StringType })
