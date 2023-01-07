@@ -46,6 +46,7 @@ fun OnBoardingScreen(
 
 
 
+
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, backgroundColor = 0xFF1C1B1F, showBackground = true)
 @Composable

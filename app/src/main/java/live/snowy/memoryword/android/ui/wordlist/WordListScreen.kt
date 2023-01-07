@@ -1,30 +1,32 @@
 package live.snowy.memoryword.android.ui.wordlist
 
 
+//import live.snowy.memoryword.android.model.words
+import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import live.snowy.memoryword.android.R
+import live.snowy.memoryword.android.data.MemoryWordRepository
 import live.snowy.memoryword.android.model.Word
-import live.snowy.memoryword.android.model.words
+import live.snowy.memoryword.android.model.WordsViewModel
 import live.snowy.memoryword.android.ui.components.DefaultSnackbar
 import live.snowy.memoryword.android.ui.components.TopLevelScaffold
 import live.snowy.memoryword.android.ui.components.WordCard
@@ -76,12 +78,37 @@ fun WordListScreen(
             LazyColumn(
                 modifier = Modifier.padding(innerPadding)
             ) {
-                items(items = words) { word ->
+                items(items = wordsList) { word ->
                     WordCard(word = word)
                 }
             }
         },
         whatPage = stringResource(id = R.string.word_list)
+    )
+}
+
+@Composable
+fun CallDatabase() {
+    val context = LocalContext.current.applicationContext
+    LaunchedEffect(key1 = Unit){
+        val repository = MemoryWordRepository(context as Application)
+        repository.getWordById(1)
+    }
+}
+
+
+@Composable
+fun WordListScreenTopLevel(
+    navController: NavHostController,
+    databaseName: String,
+    wordsViewModel: WordsViewModel = viewModel()
+){
+    val allWords by wordsViewModel.allWords.observeAsState(listOf())
+
+    WordListScreen(
+        wordsList = allWords,
+        navController = navController,
+        databaseName = databaseName
     )
 }
 
@@ -94,5 +121,7 @@ fun WordListScreenPreview() {
         WordListScreen(navController = rememberNavController(), databaseName = "test")
     }
 }
+
+
 
 

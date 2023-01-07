@@ -21,4 +21,6 @@
     <string name="flash_card_description">Here you can practice your words by flipping the card and see the meaning of the word</string>
     <string name="flash_card">Flash Card</string>
     <string name="multiple_choice_description">Here you will be shown a word and you have to select the correct answer from a list</string>
+    <string name="from_colon">From:</string>
+    <string name="to_colon">To:</string>
 </resources>

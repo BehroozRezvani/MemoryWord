@@ -13,11 +13,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import live.snowy.memoryword.android.model.words
+import live.snowy.memoryword.android.model.WordsViewModel
+//import live.snowy.memoryword.android.model.words
 import live.snowy.memoryword.android.ui.addeditword.AddEditWordScreen
 import live.snowy.memoryword.android.ui.languageselection.LanguageSelectionScreen
 import live.snowy.memoryword.android.ui.navigation.Screen
@@ -26,6 +28,7 @@ import live.snowy.memoryword.android.ui.practice.ChoosePracticeScreen
 import live.snowy.memoryword.android.ui.practice.FlashCardScreen
 import live.snowy.memoryword.android.ui.practice.MultipleChoiceScreen
 import live.snowy.memoryword.android.ui.wordlist.WordListScreen
+import live.snowy.memoryword.android.ui.wordlist.WordListScreenTopLevel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,13 +48,15 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-private fun BuildNavigationGraph() {
+private fun BuildNavigationGraph(
+    wordsViewModel: WordsViewModel = viewModel()
+) {
     val navController = rememberNavController()
     val chosenLanguageFrom = "English"
     val chosenLanguageTo = "French"
     val databaseName = remember { mutableStateOf(chosenLanguageFrom + "_" + chosenLanguageTo) }
 
-    NavHost(navController = navController, startDestination = Screen.OnBoarding.route) {
+    NavHost(navController = navController, startDestination = Screen.WordList.route) {
         /*composable(
             Screen.WordList.route,
             arguments = listOf(navArgument(Screen.WordList.argument){ type = NavType.StringType })
@@ -63,9 +68,9 @@ private fun BuildNavigationGraph() {
                 WordListScreen(navController= navController, wordsList = words, databaseName = databaseName.value)
             }
         }*/
-        composable(Screen.WordList.route) {
+        /*composable(Screen.WordList.route) {
             WordListScreen(navController = navController, databaseName = "English_French")
-        }
+        }*/
         composable(Screen.ChoosePractice.route) {
             ChoosePracticeScreen(navController = navController)
         }
@@ -83,6 +88,9 @@ private fun BuildNavigationGraph() {
         }
         composable(Screen.MultipleChoicePractice.route) {
             MultipleChoiceScreen(navController = navController)
+        }
+        composable(Screen.WordList.route) {
+            WordListScreenTopLevel(navController = navController, databaseName = "English_French", wordsViewModel = wordsViewModel)
         }
     }
 }

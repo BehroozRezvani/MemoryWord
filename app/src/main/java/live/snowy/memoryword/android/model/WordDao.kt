@@ -1,5 +1,6 @@
 package live.snowy.memoryword.android.model
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -20,7 +21,39 @@ interface WordDao {
     @Delete
     fun deleteSingleWord(word: Word)
 
-    @Query("SELECT * FROM words_table")
+    @Query("SELECT * FROM words")
     fun getAllWords(): List<Word>
 
+    @Query("SELECT * FROM words")
+    fun getAllWordsLiveData(): LiveData<List<Word>>
+
+    @Query("SELECT * FROM words WHERE id = :id")
+    fun getWordById(id: Long): Word
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import live.snowy.memoryword.android.R
+import live.snowy.memoryword.android.ui.components.Logo
 import live.snowy.memoryword.android.ui.navigation.Screen
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 
@@ -30,13 +31,7 @@ fun LanguageSelectionScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = stringResource(id = R.string.app_name),
-            modifier = Modifier
-                .size(200.dp)
-                .padding(12.dp),
-        )
+        Logo()
         CustomSurface(text = stringResource(R.string.want_to_learn_language))
         var text by remember { mutableStateOf("") }
         OutlinedTextField(
@@ -44,7 +39,7 @@ fun LanguageSelectionScreen(
             onValueChange = { newText ->
                 text = newText
             },
-            label = { Text("From:") },
+            label = { Text(stringResource(R.string.from_colon)) },
             modifier = Modifier.padding(8.dp)
         )
         Spacer(modifier = Modifier.height(70.dp))
@@ -54,7 +49,7 @@ fun LanguageSelectionScreen(
             onValueChange = { newText ->
                 text = newText
             },
-            label = { Text("To:") },
+            label = { Text(stringResource(R.string.to_colon)) },
             modifier = Modifier.padding(8.dp)
         )
         Spacer(modifier = Modifier.height(50.dp))
