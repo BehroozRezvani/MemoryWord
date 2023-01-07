@@ -3,6 +3,7 @@ package live.snowy.memoryword.android.ui.components
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -28,18 +29,13 @@ import androidx.navigation.compose.rememberNavController
 import live.snowy.memoryword.android.ui.navigation.Screen
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainPageNavigationDrawer(
-    //added code
-    //currentRoute: String,
-    //added code
     navController: NavHostController,
     drawerState: DrawerState,
     closeDrawer: () -> Unit = {},
     content: @Composable () -> Unit = {},
-    //modifier: Modifier = Modifier
 ) {
     val items = listOf(
         Pair(
@@ -48,40 +44,13 @@ fun MainPageNavigationDrawer(
         ),
         Pair(
             Icons.Default.Language,
-            stringResource(id = R.string.languageSelection)
+            stringResource(id = R.string.language_selection)
         ),
         Pair(
             Icons.Default.Help,
             stringResource(id = R.string.help_info)
         )
     )
-
-    /*ModalDrawerSheet(modifier) {
-        Image(
-            modifier = Modifier
-                .size(200.dp)
-                .padding(bottom = 16.dp, top = 16.dp)
-                .align(Alignment.CenterHorizontally),
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = stringResource(id = R.string.app_name),
-            contentScale = ContentScale.Fit
-        )
-        NavigationDrawerItem(
-            label = { Text(stringResource(id = R.string.addWord)) },
-            icon = { Icon(Icons.Filled.AddCircle, null) },
-            selected = currentRoute == Screen.AddEditWord.route,
-            onClick = {  },
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-        )
-        NavigationDrawerItem(
-            label = { Text(stringResource(id = R.string.languageSelection)) },
-            icon = { Icon(Icons.Filled.Language, null) },
-            selected = currentRoute == Screen.LanguageSelection.route,
-            onClick = {  },
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-        )
-    }*/
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -93,14 +62,7 @@ fun MainPageNavigationDrawer(
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                 ) {
-                    Image(
-                        modifier = Modifier
-                            .size(200.dp)
-                            .padding(bottom = 16.dp, top = 16.dp),
-                        painter = painterResource(id = R.drawable.logo),
-                        contentDescription = stringResource(id = R.string.app_name),
-                        contentScale = ContentScale.Fit
-                    )
+                    Logo()
                     items.forEachIndexed { index, item ->
                         NavigationDrawerItem(
                             icon = {
@@ -136,8 +98,6 @@ fun MainPageNavigationDrawer(
         content = content
     )
 }
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)

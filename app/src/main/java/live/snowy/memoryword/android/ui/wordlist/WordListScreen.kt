@@ -1,6 +1,7 @@
 package live.snowy.memoryword.android.ui.wordlist
 
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -41,8 +42,6 @@ fun WordListScreen(
 
     TopLevelScaffold(
         navController = navController,
-        coroutineScope = coroutineScope,
-        snackbarHostState = snackbarHostState,
         floatingActionButton = {
             FloatingActionButton(
                 modifier = Modifier
@@ -71,19 +70,24 @@ fun WordListScreen(
                 }
             )
         },
-    ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            items(items = words) { word ->
-                WordCard(word = word)
+        coroutineScope = coroutineScope,
+        snackbarHostState = snackbarHostState,
+        pageContent = { innerPadding ->
+            LazyColumn(
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                items(items = words) { word ->
+                    WordCard(word = word)
+                }
             }
-        }
-    }
+        },
+        whatPage = stringResource(id = R.string.word_list)
+    )
 }
 
 
 @Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES, backgroundColor = 0xFF1C1B1F, showBackground = true)
 @Composable
 fun WordListScreenPreview() {
     MemoryWordTheme(dynamicColor = false) {

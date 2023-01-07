@@ -1,10 +1,8 @@
 package live.snowy.memoryword.android.ui.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material.icons.filled.Translate
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Quiz
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.Icon
@@ -26,7 +24,7 @@ import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 
 val screens = listOf(
     Screen.WordList,
-    Screen.Practice,
+    Screen.ChoosePractice,
 )
 
 @Composable
@@ -39,7 +37,7 @@ fun MainPageNavigationBar(
             outlineIcon = Icons.Outlined.Translate,
             label = stringResource(id = R.string.word_list)
         ),
-        Screen.Practice to IconGroup(
+        Screen.ChoosePractice to IconGroup(
             filledIcon = Icons.Filled.Quiz,
             outlineIcon = Icons.Outlined.Quiz,
             label = stringResource(id = R.string.practice)

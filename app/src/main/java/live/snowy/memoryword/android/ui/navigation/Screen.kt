@@ -7,10 +7,12 @@ sealed class Screen(
     object OnBoarding: Screen("onBoarding", "")
     object LanguageSelection: Screen("languageSelection", "")
     object WordList : Screen("WordList", "")
-    object Practice : Screen("Practice", "")
+    object ChoosePractice : Screen("Practice", "")
     object MultipleChoicePractice : Screen("MultipleChoiceTest", "")
     object FlashCardPractice : Screen("FlashCardTest", "")
     object AddEditWord : Screen("AddEditWord", "")
+    //object FlashCard : Screen("FlashCard", "")
+    //object MultipleChoice : Screen("MultipleChoice", "")
 
 
 

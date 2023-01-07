@@ -3,7 +3,6 @@ package live.snowy.memoryword.android.ui.components
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -17,6 +16,7 @@ fun TopLevelScaffold(
     coroutineScope: CoroutineScope,
     snackbarHostState: SnackbarHostState? = null,
     pageContent: @Composable (innerPadding: PaddingValues) -> Unit = {},
+    whatPage: String
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
@@ -31,15 +31,18 @@ fun TopLevelScaffold(
     ) {
         Scaffold(
             topBar = {
-                MainPageTopAppBar(onClick = {
-                    coroutineScope.launch {
-                        if (drawerState.isOpen) {
-                            drawerState.close()
-                        } else {
-                            drawerState.open()
+                MainPageTopAppBar(
+                    onClick = {
+                        coroutineScope.launch {
+                            if (drawerState.isOpen) {
+                                drawerState.close()
+                            } else {
+                                drawerState.open()
+                            }
                         }
-                    }
-                })
+                    },
+                    pageTitle = whatPage
+                )
             },
             bottomBar = {
                 MainPageNavigationBar(navController)
