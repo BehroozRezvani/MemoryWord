@@ -1,12 +1,10 @@
 package live.snowy.memoryword.android.ui.practice
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +19,7 @@ import live.snowy.memoryword.android.R
 import live.snowy.memoryword.android.ui.navigation.Screen
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlashCardScreen(
     navController: NavHostController
@@ -45,6 +44,9 @@ fun FlashCardScreen(
                 shadowElevation = 10.dp,
                 shape = RoundedCornerShape(20.dp),
                 color = MaterialTheme.colorScheme.secondaryContainer,
+                onClick = {
+                          Log.i("Clicked FlashCardScreen", "FlashCardScreen")
+                },
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,

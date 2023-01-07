@@ -3,16 +3,8 @@ package live.snowy.memoryword.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
@@ -59,8 +51,8 @@ private fun BuildNavigationGraph() {
     val chosenLanguageTo = "French"
     val databaseName = remember { mutableStateOf(chosenLanguageFrom + "_" + chosenLanguageTo) }
 
-    NavHost(navController = navController, startDestination = Screen.WordList.route) {
-        composable(
+    NavHost(navController = navController, startDestination = Screen.ChoosePractice.route) {
+        /*composable(
             Screen.WordList.route,
             arguments = listOf(navArgument(Screen.WordList.argument){ type = NavType.StringType })
         ) {backStackEntry ->
@@ -70,8 +62,11 @@ private fun BuildNavigationGraph() {
                 }
                 WordListScreen(navController= navController, wordsList = words, databaseName = databaseName.value)
             }
+        }*/
+        composable(Screen.WordList.route) {
+            WordListScreen(navController = navController, databaseName = "English_French")
         }
-        composable(Screen.Practice.route) {
+        composable(Screen.ChoosePractice.route) {
             ChoosePracticeScreen(navController = navController)
         }
         composable(Screen.AddEditWord.route) {

@@ -41,8 +41,6 @@ fun WordListScreen(
 
     TopLevelScaffold(
         navController = navController,
-        coroutineScope = coroutineScope,
-        snackbarHostState = snackbarHostState,
         floatingActionButton = {
             FloatingActionButton(
                 modifier = Modifier
@@ -71,15 +69,19 @@ fun WordListScreen(
                 }
             )
         },
-    ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            items(items = words) { word ->
-                WordCard(word = word)
+        coroutineScope = coroutineScope,
+        snackbarHostState = snackbarHostState,
+        pageContent = { innerPadding ->
+            LazyColumn(
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                items(items = words) { word ->
+                    WordCard(word = word)
+                }
             }
-        }
-    }
+        },
+        whatPage = stringResource(id = R.string.word_list)
+    )
 }
 
 

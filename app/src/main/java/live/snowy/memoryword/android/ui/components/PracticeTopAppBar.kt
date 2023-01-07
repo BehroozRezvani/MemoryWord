@@ -1,6 +1,8 @@
 package live.snowy.memoryword.android.ui.components
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -11,27 +13,29 @@ import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainPageTopAppBar(
-    onClick: () -> Unit = {},
-    pageTitle: String,
+fun PracticeTopAppBar(
+    practiceTitle: String,
+
 ) {
     CenterAlignedTopAppBar(
-        title = { Text(pageTitle)},
+        title = { Text(text = practiceTitle) },
         navigationIcon = {
-            IconButton(onClick = onClick) {
+            IconButton(onClick = { }) {
                 Icon(
-                    imageVector =Icons.Filled.Menu,
-                    contentDescription = stringResource(R.string.nav_drawer_menu)
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = stringResource(R.string.nav_back_button)
                 )
             }
         }
     )
 }
 
-@Preview
+
+@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES, backgroundColor = 0xFF1C1B1F)
 @Composable
-private fun MainPageTopAppBarPreview() {
+private fun PracticeTopAppBarPreview() {
     MemoryWordTheme {
-        MainPageTopAppBar(pageTitle = "Memory Word")
+        PracticeTopAppBar("Practice 1")
     }
 }

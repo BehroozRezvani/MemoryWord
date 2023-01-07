@@ -6,14 +6,19 @@
     <string name="cats">Cats</string>
     <string name="login">Login</string>
     <string name="Help">Help</string>
-    <string name="Feedback">Feedback</string>
+    <string name="feedback">Feedback</string>
     <string name="word_list">Word list</string>
     <string name="practice">Practice</string>
-    <string name="languageSelection">Language Selection</string>
+    <string name="language_selection">Language Selection</string>
     <string name="help_info">Help information</string>
-    <string name="multipleChoice">Multiple Choice Practice</string>
+    <string name="multiple_choice">Multiple Choice</string>
     <string name="flashCard">Flash Card Practice</string>
     <string name="want_to_learn_language">Language you want to learn</string>
     <string name="native_language">Language you know\n(usually your native language)</string>
     <string name="continue_button">Continue</string>
+    <string name="nav_back_button">Go back to practice selection menu</string>
+    <string name="practice_selection">Choose Practice</string>
+    <string name="flash_card_description">Here you can practice your words by flipping the card and see the meaning of the word</string>
+    <string name="flash_card">Flash Card</string>
+    <string name="multiple_choice_description">Here you will be shown a word and you have to select the correct answer from a list</string>
 </resources>
