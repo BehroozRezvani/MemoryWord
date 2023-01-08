@@ -32,6 +32,7 @@ import live.snowy.memoryword.android.model.WordsViewModel
 import live.snowy.memoryword.android.ui.components.DefaultSnackbar
 import live.snowy.memoryword.android.ui.components.TopLevelScaffold
 import live.snowy.memoryword.android.ui.components.WordCard
+import live.snowy.memoryword.android.ui.navigation.Screen
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,9 +53,10 @@ fun WordListScreen(
                     .padding(10.dp)
                     .size(55.dp),
                 onClick = {
-                    coroutineScope.launch {
+                    navController.navigate(Screen.AddEditWord.route)
+                    /*coroutineScope.launch {
                         snackbarHostState.showSnackbar(databaseName)
-                    }
+                    }*/
                 }
             ) {
                 Icon(

@@ -27,6 +27,7 @@ import live.snowy.memoryword.android.ui.onboarding.OnBoardingScreen
 import live.snowy.memoryword.android.ui.practice.ChoosePracticeScreen
 import live.snowy.memoryword.android.ui.practice.FlashCardScreen
 import live.snowy.memoryword.android.ui.practice.MultipleChoiceScreen
+import live.snowy.memoryword.android.ui.wordlist.AddWordScreenTopLevel
 import live.snowy.memoryword.android.ui.wordlist.WordListScreen
 import live.snowy.memoryword.android.ui.wordlist.WordListScreenTopLevel
 
@@ -75,7 +76,7 @@ private fun BuildNavigationGraph(
             ChoosePracticeScreen(navController = navController)
         }
         composable(Screen.AddEditWord.route) {
-            AddEditWordScreen(navController = navController)
+            AddWordScreenTopLevel(navController = navController)
         }
         composable(Screen.LanguageSelection.route) {
             LanguageSelectionScreen(navController = navController)

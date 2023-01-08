@@ -8,7 +8,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import live.snowy.memoryword.android.model.PartsOfSpeech
 import live.snowy.memoryword.android.model.Word
 import live.snowy.memoryword.android.model.WordDao
 
@@ -53,55 +52,55 @@ abstract class MemoryWordRoomDatabase : RoomDatabase() {
             val hello = Word(
                 0,
                 "Hello",
-                PartsOfSpeech.INTERJECTION,
+                "INTERJECTION",
                 "Bonjour",
             )
             val world = Word(
                 0,
                 "World",
-                PartsOfSpeech.NOUN,
+                "NOUN",
                 "Monde",
             )
             val howAreYou = Word(
                 0,
                 "How are you?",
-                PartsOfSpeech.PHRASE,
+                "PHRASE",
                 "Comment allez-vous?",
             )
             val iAmFine = Word(
                 0,
                 "I am fine",
-                PartsOfSpeech.PHRASE,
+                "PHRASE",
                 "Je vais bien",
             )
             val iAmGood = Word(
                 0,
                 "I am good",
-                PartsOfSpeech.PHRASE,
+                "PHRASE",
                 "Je vais bien",
             )
             val flower = Word(
                 0,
                 "Flower",
-                PartsOfSpeech.NOUN,
+                "NOUN",
                 "Fleur",
             )
             val tree = Word(
                 0,
                 "Tree",
-                PartsOfSpeech.NOUN,
+                "NOUN",
                 "Arbre",
             )
             val apple = Word(
                 0,
                 "Apple",
-                PartsOfSpeech.NOUN,
+                "NOUN",
                 "Pomme",
             )
             val banana = Word(
                 0,
                 "Banana",
-                PartsOfSpeech.NOUN,
+                "NOUN",
                 "Banane",
             )
 

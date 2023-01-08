@@ -26,4 +26,10 @@
     <string name="word">Word:</string>
     <string name="finishAddingWord">Finish Adding Word</string>
     <string name="back">Go Back</string>
+    <string name="correct">Correct</string>
+    <string name="wrong">Wrong</string>
+    <string name="flash_card_practice">Flash Card Practice</string>
+    <string name="next">Next</string>
+    <string name="translation">Translation:</string>
+    <string name="partsOfSpeech">Parts of Speech:</string>
 </resources>

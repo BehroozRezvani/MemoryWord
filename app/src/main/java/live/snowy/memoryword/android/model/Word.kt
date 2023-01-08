@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 data class Word(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val word: String,
-    val partsOfSpeech: PartsOfSpeech,
+    val partsOfSpeech: String,
     val translation: String,
     //val isLearned: Boolean,
     //val definition: String,

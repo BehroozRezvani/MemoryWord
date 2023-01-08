@@ -16,7 +16,8 @@ fun TopLevelScaffold(
     coroutineScope: CoroutineScope,
     snackbarHostState: SnackbarHostState? = null,
     pageContent: @Composable (innerPadding: PaddingValues) -> Unit = {},
-    whatPage: String
+    whatPage: String,
+    haveBottomBar: Boolean = true
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
@@ -45,7 +46,7 @@ fun TopLevelScaffold(
                 )
             },
             bottomBar = {
-                MainPageNavigationBar(navController)
+                if (haveBottomBar) MainPageNavigationBar(navController)
             },
             floatingActionButton = floatingActionButton,
             snackbarHost = {

@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import live.snowy.memoryword.android.model.PartsOfSpeech
+
 import live.snowy.memoryword.android.model.Word
 
 
@@ -34,14 +34,14 @@ fun WordCard(word: Word) {
 @Composable
 fun CardContent(
     word: String,
-    partsOfSpeech: PartsOfSpeech,
+    partsOfSpeech: String,
     translation: String
 ) {
     Column(
         modifier = Modifier
             .padding(8.dp)
     ) {
-        Text(text = partsOfSpeech.name, fontSize = 8.sp)
+        Text(text = partsOfSpeech, fontSize = 8.sp)
         Text(text = word, fontWeight = FontWeight.Bold, fontSize = 18.sp)
         Text(text = translation, fontWeight = FontWeight.Normal, modifier = Modifier.padding(top = 4.dp))
     }
@@ -58,7 +58,7 @@ fun WordCardPreview() {
     ) {
         CardContent(
             word = "word",
-            partsOfSpeech = PartsOfSpeech.NOUN,
+            partsOfSpeech = "NOUN",
             translation = "translation"
         )
     }
