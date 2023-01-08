@@ -17,7 +17,7 @@ fun Logo(modifier: Modifier = Modifier) {
     Image(
         modifier = Modifier
             .size(200.dp)
-            .padding(bottom = 16.dp, top = 16.dp),
+            .padding(16.dp),
         painter = painterResource(if (isSystemInDarkTheme()) R.drawable.logo_dark else R.drawable.logo),
         contentDescription = stringResource(id = R.string.app_name),
         contentScale = ContentScale.Fit,

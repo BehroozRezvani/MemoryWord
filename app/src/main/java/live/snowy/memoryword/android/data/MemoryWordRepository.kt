@@ -21,4 +21,8 @@ class MemoryWordRepository(application:Application) {
     suspend fun deleteSingleWord(word: Word) {
         wordDao.deleteSingleWord(word)
     }
+
+    fun deleteAllWords() {
+        wordDao.deleteAllWords()
+    }
 }

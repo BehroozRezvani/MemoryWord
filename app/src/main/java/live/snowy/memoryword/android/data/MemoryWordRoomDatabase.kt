@@ -92,6 +92,18 @@ abstract class MemoryWordRoomDatabase : RoomDatabase() {
                 PartsOfSpeech.NOUN,
                 "Arbre",
             )
+            val apple = Word(
+                0,
+                "Apple",
+                PartsOfSpeech.NOUN,
+                "Pomme",
+            )
+            val banana = Word(
+                0,
+                "Banana",
+                PartsOfSpeech.NOUN,
+                "Banane",
+            )
 
             val wordlist = mutableListOf(
                 hello,
@@ -100,7 +112,9 @@ abstract class MemoryWordRoomDatabase : RoomDatabase() {
                 iAmFine,
                 iAmGood,
                 flower,
-                tree
+                tree,
+                apple,
+                banana,
             )
 
             val wordDao = instance.wordDao()

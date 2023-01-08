@@ -30,30 +30,9 @@ interface WordDao {
     @Query("SELECT * FROM words WHERE id = :id")
     fun getWordById(id: Long): Word
 
+    //delete all words
+    @Query("DELETE FROM words")
+    fun deleteAllWords()
+
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
