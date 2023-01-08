@@ -1,6 +1,7 @@
 package live.snowy.memoryword.android.model
 
 enum class PartsOfSpeech {
+    OTHER,
     NOUN,
     VERB,
     ADJECTIVE,
@@ -16,5 +17,4 @@ enum class PartsOfSpeech {
     IDIOM,
     PHRASE,
     EXPRESSION,
-    OTHER
 }

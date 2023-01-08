@@ -3,6 +3,8 @@ package live.snowy.memoryword.android.ui.languageselection
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,28 +29,28 @@ fun LanguageSelectionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(12.dp),
+            .padding(12.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Logo()
         CustomSurface(text = stringResource(R.string.want_to_learn_language))
-        var text by remember { mutableStateOf("") }
+        var fromText by remember { mutableStateOf("") }
+        var toText by remember { mutableStateOf("") }
         OutlinedTextField(
-            value = text,
+            value = fromText,
             onValueChange = { newText ->
-                text = newText
-            },
+                fromText = newText },
             label = { Text(stringResource(R.string.from_colon)) },
             modifier = Modifier.padding(8.dp)
         )
         Spacer(modifier = Modifier.height(70.dp))
         CustomSurface(text = stringResource(R.string.native_language))
         OutlinedTextField(
-            value = text,
+            value = toText,
             onValueChange = { newText ->
-                text = newText
-            },
+                toText = newText },
             label = { Text(stringResource(R.string.to_colon)) },
             modifier = Modifier.padding(8.dp)
         )
