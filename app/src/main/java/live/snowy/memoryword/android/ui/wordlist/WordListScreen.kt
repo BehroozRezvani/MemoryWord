@@ -1,10 +1,6 @@
 package live.snowy.memoryword.android.ui.wordlist
 
-
-//import live.snowy.memoryword.android.model.words
-import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,7 +21,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import live.snowy.memoryword.android.R
-import live.snowy.memoryword.android.data.MemoryWordRepository
 import live.snowy.memoryword.android.model.Word
 import live.snowy.memoryword.android.model.WordsViewModel
 import live.snowy.memoryword.android.ui.components.DefaultSnackbar
@@ -35,12 +29,33 @@ import live.snowy.memoryword.android.ui.components.WordCard
 import live.snowy.memoryword.android.ui.navigation.Screen
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 
+
+@Composable
+fun WordListScreenTopLevel(
+    navController: NavHostController,
+    //databaseName: String,
+    wordsViewModel: WordsViewModel = viewModel()
+){
+    val allWords by wordsViewModel.allWords.observeAsState(listOf())
+
+    WordListScreen(
+        wordsList = allWords,
+        navController = navController,
+        //databaseName = databaseName,
+        deleteWord = { word ->
+            wordsViewModel.deleteWord(word)
+        }
+    )
+}
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WordListScreen(
     wordsList: List<Word> = listOf(),
     navController: NavHostController,
-    databaseName: String
+    deleteWord: (Word) -> Unit = {},
+    //databaseName: String
 ) {
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -51,7 +66,8 @@ fun WordListScreen(
             FloatingActionButton(
                 modifier = Modifier
                     .padding(10.dp)
-                    .size(55.dp),
+                    .size(55.dp)
+                    .verticalScroll(rememberScrollState()),
                 onClick = {
                     navController.navigate(Screen.AddEditWord.route)
                     /*coroutineScope.launch {
@@ -84,36 +100,16 @@ fun WordListScreen(
                     .padding(innerPadding)
             ) {
                 items(items = wordsList) { word ->
-                    WordCard(word = word)
+                    WordCard(
+                        word = word,
+                        deleteOnClick = {
+                            deleteWord(word)
+                        }
+                    )
                 }
             }
         },
         whatPage = stringResource(id = R.string.word_list)
-    )
-}
-
-@Composable
-fun CallDatabase() {
-    val context = LocalContext.current.applicationContext
-    LaunchedEffect(key1 = Unit){
-        val repository = MemoryWordRepository(context as Application)
-        repository.getWordById(1)
-    }
-}
-
-
-@Composable
-fun WordListScreenTopLevel(
-    navController: NavHostController,
-    databaseName: String,
-    wordsViewModel: WordsViewModel = viewModel()
-){
-    val allWords by wordsViewModel.allWords.observeAsState(listOf())
-
-    WordListScreen(
-        wordsList = allWords,
-        navController = navController,
-        databaseName = databaseName
     )
 }
 
@@ -123,7 +119,10 @@ fun WordListScreenTopLevel(
 @Composable
 fun WordListScreenPreview() {
     MemoryWordTheme(dynamicColor = false) {
-        WordListScreen(navController = rememberNavController(), databaseName = "test")
+        WordListScreen(
+            navController = rememberNavController(),
+            //databaseName = "test"
+        )
     }
 }
 

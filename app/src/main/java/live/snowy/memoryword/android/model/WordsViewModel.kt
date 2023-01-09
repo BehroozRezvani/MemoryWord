@@ -19,4 +19,10 @@ class WordsViewModel(application: Application) : AndroidViewModel(application) {
             repository.insertSingleWord(word)
         }
     }
+
+    fun deleteWord(word: Word) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteSingleWord(word)
+        }
+    }
 }

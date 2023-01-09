@@ -1,31 +1,43 @@
 package live.snowy.memoryword.android.ui.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import android.content.res.Configuration
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import live.snowy.memoryword.android.R
 import live.snowy.memoryword.android.model.Word
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WordCard(word: Word) {
+fun WordCard(
+    word: Word,
+    deleteOnClick: () -> Unit
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
     Card(
         modifier = Modifier
             .padding(vertical = 4.dp, horizontal = 8.dp)
-            .fillMaxWidth()
-    )  {
+            .fillMaxWidth(),
+        onClick = {
+            expanded = !expanded
+        }
+    ) {
         CardContent(
             word = word.word,
             partsOfSpeech = word.partsOfSpeech,
-            translation = word.translation
+            translation = word.translation,
+            expanded = expanded,
+            deleteOnClick = deleteOnClick
         )
     }
 }
@@ -35,20 +47,69 @@ fun WordCard(word: Word) {
 fun CardContent(
     word: String,
     partsOfSpeech: String,
-    translation: String
+    translation: String,
+    expanded: Boolean,
+    deleteOnClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(start = 15.dp, top = 15.dp, end = 5.dp, bottom = 5.dp)
+            .fillMaxWidth()
     ) {
-        Text(text = partsOfSpeech, fontSize = 8.sp)
-        Text(text = word, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-        Text(text = translation, fontWeight = FontWeight.Normal, modifier = Modifier.padding(top = 4.dp))
+        Text(
+            text = partsOfSpeech,
+            fontSize = 8.sp
+        )
+        Text(
+            text = word,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp
+        )
+        Text(
+            text = translation,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.padding(top = 4.dp)
+        )
+        if (expanded) {
+            Spacer(modifier = Modifier.height(2.dp))
+            Row(
+                modifier = Modifier
+                    .align(Alignment.End)
+            ) {
+                Button(
+                    enabled = false,
+                    onClick = { },
+                    modifier = Modifier
+                        .padding(8.dp),
+                    /*colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Blue.copy(alpha = 0.7f, blue = 0.5f),
+                    )*/
+                ) {
+                    Text(text = stringResource(R.string.edit))
+                }
+                Button(
+                    onClick = { deleteOnClick() },
+                    modifier = Modifier
+                        .padding(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red.copy(alpha = 0.7f),
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text(text = stringResource(R.string.delete))
+                }
+            }
+        }
     }
 }
 
 
 @Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    backgroundColor = 0xFF1C1B1F,
+    showBackground = true
+)
 @Composable
 fun WordCardPreview() {
     Card(
@@ -59,7 +120,9 @@ fun WordCardPreview() {
         CardContent(
             word = "word",
             partsOfSpeech = "NOUN",
-            translation = "translation"
+            translation = "translation",
+            expanded = true,
+            deleteOnClick = {}
         )
     }
 }
