@@ -11,7 +11,10 @@ import live.snowy.memoryword.android.data.MemoryWordRepository
 class WordsViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: MemoryWordRepository = MemoryWordRepository(application)
 
-    var allWords: LiveData<List<Word>> = repository.getAllWords()
+    var allWordsLive: LiveData<List<Word>> = repository.getAllWordsLive()
+        private set
+
+    var allWords: List<Word> = repository.getAllWords()
         private set
 
     fun insertWord(word: Word) {

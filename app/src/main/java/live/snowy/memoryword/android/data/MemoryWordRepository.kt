@@ -10,7 +10,9 @@ class MemoryWordRepository(application:Application) {
 
     suspend fun insertMultipleWords(words: List<Word>) = wordDao.insertMultipleWords(words)
 
-    fun getAllWords() = wordDao.getAllWordsLiveData()
+    fun getAllWordsLive() = wordDao.getAllWordsLiveData()
+
+    fun getAllWords() = wordDao.getAllWords()
 
     fun getWordById(id: Long) = wordDao.getWordById(id)
 

@@ -1,17 +1,13 @@
 package live.snowy.memoryword.android.ui.wordlist
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -41,7 +37,7 @@ fun WordListScreenTopLevel(
     //databaseName: String,
     wordsViewModel: WordsViewModel = viewModel()
 ){
-    val allWords by wordsViewModel.allWords.observeAsState(listOf())
+    val allWords by wordsViewModel.allWordsLive.observeAsState(listOf())
 
     WordListScreen(
         wordsList = allWords,
@@ -70,15 +66,9 @@ fun WordListScreen(
             FloatingActionButton(
                 shape = CircleShape,
                 modifier = Modifier
-                    .padding(10.dp)
-                    //.size(55.dp)
-                    //.verticalScroll(rememberScrollState())
-                ,
+                    .padding(10.dp),
                 onClick = {
                     navController.navigate(Screen.AddEditWord.route)
-                    /*coroutineScope.launch {
-                        snackbarHostState.showSnackbar(databaseName)
-                    }*/
                 }
             ) {
                 Icon(
@@ -127,7 +117,6 @@ fun WordListScreenPreview() {
     MemoryWordTheme(dynamicColor = false) {
         WordListScreen(
             navController = rememberNavController(),
-            //databaseName = "test"
         )
     }
 }

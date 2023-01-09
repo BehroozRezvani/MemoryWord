@@ -37,7 +37,7 @@ fun FlashCardScreenTopLevel(
     wordsViewModel: WordsViewModel = viewModel(),
     alreadyPracticedWordsIDs: String = ""
 ){
-    val allWords by wordsViewModel.allWords.observeAsState(listOf())
+    val allWords by wordsViewModel.allWordsLive.observeAsState(listOf())
 
     FlashCardScreen(
         wordsList = allWords,

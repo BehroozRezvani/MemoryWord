@@ -1,6 +1,7 @@
 package live.snowy.memoryword.android.ui.practice
 
 
+import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,8 +9,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,32 +21,28 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import live.snowy.memoryword.android.model.Word
 import live.snowy.memoryword.android.model.WordsViewModel
+import live.snowy.memoryword.android.model.words1
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 
 @Composable
-fun FlashCardScreenTopLevel(
+fun MultipleChoiceScreenTopLevel(
     navController: NavHostController,
-    wordsViewModel: WordsViewModel = viewModel(),
-    //score: Int,
-    //alreadyPracticedWordsIDs: String
+    wordsViewModel: WordsViewModel = viewModel()
 ) {
-    val allWords by wordsViewModel.allWords.observeAsState(listOf())
-    var wordsList = allWords
+    val allWordsFromDB = wordsViewModel.allWords
     MultipleChoiceScreen(
-        wordsList = wordsList,
+        wordsList = allWordsFromDB,
         navController = navController,
-        //score = score,
-        //alreadyPracticedWordsIDs = alreadyPracticedWordsIDs,
     )
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MultipleChoiceScreen(
     navController: NavHostController,
     wordsList: List<Word> = listOf(),
 ) {
+    var score by remember { mutableStateOf(0) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,6 +50,18 @@ fun MultipleChoiceScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(
+            text = "Multiple Choice Screen",
+            fontSize = 20.sp,
+            modifier = Modifier.padding(10.dp),
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Text(
+            text = "Score:${score}",
+            fontSize = 20.sp,
+            modifier = Modifier.padding(10.dp),
+            color = MaterialTheme.colorScheme.onSurface
+        )
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -67,43 +75,81 @@ fun MultipleChoiceScreen(
                     .fillMaxWidth()
                     .padding(start = 8.dp, end = 8.dp, top = 8.dp),
             ) {
-                MakeQuestion()
+                MakeQuestion(wordsList, score)
             }
         }
     }
 }
 
 @Composable
-fun MakeQuestion(
-    shuffledWordList: List<Word> = GetShuffledList()
-){
-    val randomList
-    for (i in 0..3){
-
-    }
-
-    val randomList = mutableSetOf(IntRange(1, shuffledWordList.size).random())
-    randomList.add(0)
+fun MakeQuestion (
+    wordList: List<Word> = listOf(),
+    score : Int
+) {
+    var scoreInside by remember { mutableStateOf(0) }
+    val randomIDSet = mutableSetOf<Int>()
+    while (randomIDSet.size < 3) randomIDSet.add((1..wordList.size).random())
+    randomIDSet.add(0)
+    var List2: List<Int> = randomIDSet.toList().shuffled()
+    //List2 = List2.shuffled()
     Surface(
         modifier = Modifier
             .fillMaxWidth(),
         shadowElevation = 3.dp,
         shape = RoundedCornerShape(11.dp),
-        //onClick = { /*TODO*/ },
     ) {
         Text(
-            text = shuffledWordList[0].word,
+            text = wordList[0].word,
             modifier = Modifier
                 .padding(16.dp),
             fontSize = 20.sp
         )
     }
     Spacer(modifier = Modifier.height(20.dp))
-    QuestionChoice(choice = shuffledWordList[1].translation, onClick = { /*TODO*/ })
-    QuestionChoice(choice = shuffledWordList[2].translation, onClick = { /*TODO*/ })
-    QuestionChoice(choice = shuffledWordList[3].translation, onClick = { /*TODO*/ })
-    QuestionChoice(choice = shuffledWordList[4].translation, onClick = { /*TODO*/ })
+    QuestionChoice(choice = wordList[0].translation,
+        onClick = {
+            checkAnswer(
+                answer = wordList[0].word,
+                word = wordList[0]
+            )
+            scoreInside++
+        })
+    QuestionChoice(
+        choice = wordList[1].translation,
+        onClick = {
+            checkAnswer(
+                answer = wordList[0].word,
+                word = wordList[1]
+            )
+        })
+    QuestionChoice(
+        choice = wordList[2].translation,
+        onClick = {
+            checkAnswer(
+                answer = wordList[0].word,
+                word = wordList[2]
+            )
+        })
+    QuestionChoice(
+        choice = wordList[3].translation,
+        onClick = {
+            checkAnswer(
+                answer = wordList[0].word,
+                word = wordList[3]
+            )
+        })
     Spacer(modifier = Modifier.height(12.dp))
+    score = scoreInside
+}
+
+fun checkAnswer(
+    answer: String,
+    word: Word
+): Boolean {
+    if (answer == word.translation) {
+        return true
+    }
+    return false
 }
 
 
@@ -112,7 +158,7 @@ fun MakeQuestion(
 fun QuestionChoice(
     choice: String,
     onClick: () -> Unit
-){
+) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -142,6 +188,6 @@ fun GetShuffledList(
 @Composable
 fun MultipleChoiceScreenPreview() {
     MemoryWordTheme() {
-        MultipleChoiceScreen(navController = rememberNavController())
+        MultipleChoiceScreen(navController = rememberNavController(), wordsList = words1)
     }
 }
