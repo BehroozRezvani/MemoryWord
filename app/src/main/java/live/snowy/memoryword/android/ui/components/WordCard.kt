@@ -53,17 +53,17 @@ fun CardContent(
 ) {
     Column(
         modifier = Modifier
-            .padding(start = 15.dp, top = 15.dp, end = 5.dp, bottom = 5.dp)
+            .padding(start = 15.dp, top = 15.dp, end = 5.dp, bottom = 15.dp)
             .fillMaxWidth()
     ) {
         Text(
             text = partsOfSpeech,
-            fontSize = 8.sp
+            fontSize = 10.sp
         )
         Text(
             text = word,
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
+            fontSize = 20.sp
         )
         Text(
             text = translation,
@@ -71,7 +71,7 @@ fun CardContent(
             modifier = Modifier.padding(top = 4.dp)
         )
         if (expanded) {
-            Spacer(modifier = Modifier.height(2.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier
                     .align(Alignment.End)
@@ -80,7 +80,7 @@ fun CardContent(
                     enabled = false,
                     onClick = { },
                     modifier = Modifier
-                        .padding(8.dp),
+                        .padding(top = 4.dp, bottom = 0.dp, end = 8.dp),
                     /*colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Blue.copy(alpha = 0.7f, blue = 0.5f),
                     )*/
@@ -90,7 +90,7 @@ fun CardContent(
                 Button(
                     onClick = { deleteOnClick() },
                     modifier = Modifier
-                        .padding(8.dp),
+                        .padding(top = 4.dp, bottom = 0.dp, end = 10.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Red.copy(alpha = 0.7f),
                         contentColor = Color.White

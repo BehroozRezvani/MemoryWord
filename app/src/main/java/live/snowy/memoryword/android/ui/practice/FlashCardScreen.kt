@@ -10,28 +10,53 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import live.snowy.memoryword.android.R
+import live.snowy.memoryword.android.model.Word
+import live.snowy.memoryword.android.model.WordsViewModel
 import live.snowy.memoryword.android.ui.navigation.Screen
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
+
+
+@Composable
+fun FlashCardScreenTopLevel(
+    navController: NavHostController,
+    //databaseName: String,
+    wordsViewModel: WordsViewModel = viewModel(),
+    alreadyPracticedWordsIDs: String = ""
+){
+    val allWords by wordsViewModel.allWords.observeAsState(listOf())
+
+    FlashCardScreen(
+        wordsList = allWords,
+        navController = navController,
+        score = 0,
+        alreadyPracticedWordsIDs = "",
+
+    )
+}
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlashCardScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    wordsList: List<Word> = listOf(),
+    score: Int,
+    alreadyPracticedWordsIDs: String
 ) {
     Scaffold(
         bottomBar = {
@@ -178,6 +203,74 @@ fun RowScope.Buttons(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FlashCard(
+    word: Word,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+){
+    Surface(
+        modifier = modifier
+            .padding(4.dp)
+            .size(300.dp),
+        shadowElevation = 10.dp,
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.secondaryContainer,
+        onClick = onClick,
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(20.dp),
+            text = "NOUN",
+            fontStyle = FontStyle.Italic,
+            fontSize = 15.sp
+        )
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = word.word,
+                modifier = Modifier
+                    .padding(8.dp),
+                fontSize = 50.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+
+fun getWordsAlreadyPracticed(alreadyPracticedWordsIDs: String): List<Long>{
+    val wordsAlreadyPracticed = mutableListOf<Long>()
+
+    if( alreadyPracticedWordsIDs.isNotEmpty() ){
+
+        val wordsAlreadyPracticedIDs = alreadyPracticedWordsIDs.split("_").toTypedArray()
+
+        for(wordID in wordsAlreadyPracticedIDs){
+            wordsAlreadyPracticed.add(wordID.toLong())
+        }
+    }
+    return wordsAlreadyPracticed
+}
+
+fun getWordsNotPracticed(wordsList: List<Word>, wordsAlreadyPracticed: List<Long>): List<Word>{
+    val wordsNotPracticed = mutableListOf<Word>()
+
+    for(word in wordsList){
+        if( word.id !in wordsAlreadyPracticed ){
+            wordsNotPracticed.add(word)
+        }
+    }
+    return wordsNotPracticed
+}
+
+
+
+
+
 
 @Composable
 fun FlashCardText(
@@ -212,6 +305,11 @@ fun FlashCardText(
 @Composable
 fun FlashCardScreenPreview() {
     MemoryWordTheme {
-        FlashCardScreen(navController = rememberNavController())
+        FlashCardScreen(
+            navController = rememberNavController(),
+            wordsList = listOf(),
+            score = 0,
+            alreadyPracticedWordsIDs = ""
+        )
     }
 }

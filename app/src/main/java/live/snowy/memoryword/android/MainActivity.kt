@@ -1,46 +1,53 @@
 package live.snowy.memoryword.android
 
+//import live.snowy.memoryword.android.model.words
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
-
-import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.compose.rememberNavController
 import live.snowy.memoryword.android.model.WordsViewModel
-//import live.snowy.memoryword.android.model.words
-import live.snowy.memoryword.android.ui.addeditword.AddEditWordScreen
 import live.snowy.memoryword.android.ui.languageselection.LanguageSelectionScreen
 import live.snowy.memoryword.android.ui.navigation.Screen
 import live.snowy.memoryword.android.ui.onboarding.OnBoardingScreen
 import live.snowy.memoryword.android.ui.practice.ChoosePracticeScreen
 import live.snowy.memoryword.android.ui.practice.FlashCardScreen
 import live.snowy.memoryword.android.ui.practice.MultipleChoiceScreen
+import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 import live.snowy.memoryword.android.ui.wordlist.AddWordScreenTopLevel
-import live.snowy.memoryword.android.ui.wordlist.WordListScreen
 import live.snowy.memoryword.android.ui.wordlist.WordListScreenTopLevel
 
 class MainActivity : ComponentActivity() {
+
+    /*@Inject
+    lateinit var splashViewModel: SplashViewModel*/
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        /*installSplashScreen().setKeepOnScreenCondition{
+            !splashViewModel.isLoading.value
+        }*/
+
         setContent {
             MemoryWordTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    BuildNavigationGraph()
+                    /*val screen by splashViewModel.startDestination*/
+                    BuildNavigationGraph(
+                        /*startDestination = screen*/
+                    )
                 }
             }
         }
@@ -50,14 +57,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun BuildNavigationGraph(
-    wordsViewModel: WordsViewModel = viewModel()
+    wordsViewModel: WordsViewModel = viewModel(),
+    /*startDestination: String*/
 ) {
     val navController = rememberNavController()
-    val chosenLanguageFrom = "English"
-    val chosenLanguageTo = "French"
-    val databaseName = remember { mutableStateOf(chosenLanguageFrom + "_" + chosenLanguageTo) }
+    //val chosenLanguageFrom = "English"
+    //val chosenLanguageTo = "French"
+    //val databaseName = remember { mutableStateOf(chosenLanguageFrom + "_" + chosenLanguageTo) }
 
-    NavHost(navController = navController, startDestination = Screen.WordList.route) {
+    NavHost(navController = navController, startDestination = Screen.OnBoarding.route) {
         /*composable(
             Screen.WordList.route,
             arguments = listOf(navArgument(Screen.WordList.argument){ type = NavType.StringType })
@@ -85,13 +93,13 @@ private fun BuildNavigationGraph(
             OnBoardingScreen(navController = navController)
         }
         composable(Screen.FlashCardPractice.route) {
-            FlashCardScreen(navController = navController)
+            FlashCardScreen(navController = navController, wordsList = listOf(), score = 0, alreadyPracticedWordsIDs = "")
         }
         composable(Screen.MultipleChoicePractice.route) {
             MultipleChoiceScreen(navController = navController)
         }
         composable(Screen.WordList.route) {
-            WordListScreenTopLevel(navController = navController, databaseName = "English_French", wordsViewModel = wordsViewModel)
+            WordListScreenTopLevel(navController = navController, /*databaseName = "English_French"*/ wordsViewModel = wordsViewModel)
         }
     }
 }

@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,11 +15,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import live.snowy.memoryword.android.ui.components.Logo
+import live.snowy.memoryword.android.ui.navigation.Screen
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 
 @Composable
 fun OnBoardingScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    /*welcomeViewModel: WelcomeViewModel = hiltViewModel()*/
 ) {
     Column(
         modifier = Modifier
@@ -34,7 +34,13 @@ fun OnBoardingScreen(
         Text(
             text = "OnBoardingScreen",
         )
-        Button(onClick = { /*TODO*/ }) {
+        Button(
+            onClick = {
+                /*welcomeViewModel.saveOnBoardingState(completed = true)*/
+                navController.popBackStack()
+                navController.navigate(Screen.WordList.route)
+            }
+        ) {
             Text(
                 text = "Start",
                 modifier = Modifier
