@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
+import live.snowy.memoryword.android.EditorViewModel
 import live.snowy.memoryword.android.R
 import live.snowy.memoryword.android.model.Word
 import live.snowy.memoryword.android.model.WordsViewModel
@@ -45,7 +46,10 @@ fun WordListScreenTopLevel(
         //databaseName = databaseName,
         deleteWord = { word ->
             wordsViewModel.deleteWord(word)
-        }
+        },
+        /*deleteAllWords = {
+            wordsViewModel.deleteAllWords()
+        }*/
     )
 }
 
@@ -55,10 +59,20 @@ fun WordListScreen(
     wordsList: List<Word> = listOf(),
     navController: NavHostController,
     deleteWord: (Word) -> Unit = {},
-    //databaseName: String
+    //databaseName: String,
+    //deleteAllWords: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    /*if (databaseName.isNotEmpty()){
+        val listOfLanguages = databaseName.split("_")
+        val fromLang = listOfLanguages[0]
+        val toLang = listOfLanguages[1]
+        if (shouldDeleteDB(fromLang = fromLang, toLang = toLang)){
+            deleteAllWords()
+        }
+    }*/
+
 
     TopLevelScaffold(
         navController = navController,
@@ -109,6 +123,36 @@ fun WordListScreen(
     )
 }
 
+/*@Composable
+fun getLanguages(
+    editorViewModel: EditorViewModel = viewModel()
+): List<String> {
+    return editorViewModel.readFile()
+}
+
+@Composable
+fun languagesExist(fromLang: String, toLang: String, languages: List<String> = getLanguages()): Boolean {
+    return (fromLang == languages[0] && toLang == languages[1])
+}
+
+@Composable
+fun isListEmpty(langs: List<String> = getLanguages()): Boolean = langs.isEmpty()
+
+@Composable
+fun shouldDeleteDB(fromLang: String, toLang: String): Boolean {
+    if (!isListEmpty()) {
+        return !languagesExist(fromLang = fromLang, toLang = toLang)
+    }
+    return true
+}*/
+
+
+
+
+
+
+
+
 
 @Preview
 @Preview(uiMode = UI_MODE_NIGHT_YES, backgroundColor = 0xFF1C1B1F, showBackground = true)
@@ -117,6 +161,7 @@ fun WordListScreenPreview() {
     MemoryWordTheme(dynamicColor = false) {
         WordListScreen(
             navController = rememberNavController(),
+            //databaseName = ""
         )
     }
 }

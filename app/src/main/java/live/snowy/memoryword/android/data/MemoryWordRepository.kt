@@ -14,6 +14,8 @@ class MemoryWordRepository(application:Application) {
 
     fun getAllWords() = wordDao.getAllWords()
 
+    fun getWordCount() = wordDao.getWordCount()
+
     fun getWordById(id: Long) = wordDao.getWordById(id)
 
     suspend fun updateSingleWord(word: Word) {

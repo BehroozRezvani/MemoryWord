@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,11 +21,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import live.snowy.memoryword.android.R
 import live.snowy.memoryword.android.model.Word
 import live.snowy.memoryword.android.model.WordsViewModel
+import live.snowy.memoryword.android.model.words1
 import live.snowy.memoryword.android.ui.navigation.Screen
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 
@@ -33,21 +35,16 @@ import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 @Composable
 fun FlashCardScreenTopLevel(
     navController: NavHostController,
-    //databaseName: String,
     wordsViewModel: WordsViewModel = viewModel(),
-    alreadyPracticedWordsIDs: String = ""
-){
-    val allWords by wordsViewModel.allWordsLive.observeAsState(listOf())
+) {
+    val allWords = wordsViewModel.allWords
 
     FlashCardScreen(
         wordsList = allWords,
         navController = navController,
-        score = 0,
-        alreadyPracticedWordsIDs = "",
-
+        //alreadyPracticedWordsIDs = "",
     )
 }
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,30 +52,33 @@ fun FlashCardScreenTopLevel(
 fun FlashCardScreen(
     navController: NavHostController,
     wordsList: List<Word> = listOf(),
-    score: Int,
-    alreadyPracticedWordsIDs: String
+    //alreadyPracticedWordsIDs: String
 ) {
+    var scoreInside by remember { mutableStateOf(0) }
+    val wrongRed = Color(0xFFAE344C)
+    val correctGreen = Color(0xFF34AD79)
     Scaffold(
         bottomBar = {
             NavigationBar() {
                 NavigationBarItem(
-                    icon =
-                    {
+                    icon = {
                         Icon(
-                            Icons.Default.ChevronRight,
-                            contentDescription = stringResource(id = R.string.next)
+                            Icons.Default.Cancel,
+                            contentDescription = stringResource(id = R.string.end_practice),
                         )
                     },
                     selected = false,
                     onClick = {
-                        navController.navigate(Screen.WordList.route){
-                            popUpTo(Screen.WordList.route){
-                                inclusive = true
-                            }
+                        val destination = "${Screen.ScoreScreen.basePath}${scoreInside}"
+                        navController.navigate(destination) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            // Avoid multiple copies of the same destination when
+                            // reselecting the same item
+                            launchSingleTop = true
                         }
                     },
                     label = {
-                        Text(stringResource(id = R.string.next))
+                        Text(stringResource(id = R.string.end_practice))
                     }
                 )
             }
@@ -103,7 +103,21 @@ fun FlashCardScreen(
             )
         }
 
-    ) {innerPadding ->
+    ) { innerPadding ->
+        val wordlist = mutableListOf<Word>()
+        wordlist.addAll(wordsList)
+        //wordlist.shuffle()
+
+        var cardText by remember { mutableStateOf("") }
+        //var wordMeaning by remember { mutableStateOf("") }
+        var wordPOS by remember { mutableStateOf("") }
+
+        var i by remember { mutableStateOf(0) }
+        cardText = wordlist[i].word
+        wordPOS = wordlist[i].partsOfSpeech
+
+
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -111,6 +125,10 @@ fun FlashCardScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(text = "Score: $scoreInside",
+                fontSize = 20.sp,
+                modifier = Modifier.weight(1f),
+            )
             Box(
                 modifier = Modifier
                     .weight(4f),
@@ -125,13 +143,17 @@ fun FlashCardScreen(
                     shape = RoundedCornerShape(20.dp),
                     color = MaterialTheme.colorScheme.secondaryContainer,
                     onClick = {
-                        Log.i("Clicked FlashCardScreen", "FlashCardScreen")
+                        cardText = if (cardText == wordlist[i].word) {
+                            wordlist[i].translation
+                        } else {
+                            wordlist[i].word
+                        }
                     },
                 ) {
                     Text(
                         modifier = Modifier
                             .padding(20.dp),
-                        text = "NOUN",
+                        text = wordPOS,
                         fontStyle = FontStyle.Italic,
                         fontSize = 15.sp
                     )
@@ -140,7 +162,7 @@ fun FlashCardScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Life",
+                            text = cardText,
                             modifier = Modifier
                                 .padding(8.dp),
                             fontSize = 50.sp,
@@ -162,16 +184,37 @@ fun FlashCardScreen(
                 ) {
                     Buttons(
                         buttonText = stringResource(id = R.string.wrong),
-                        buttonColor = Color.Red,
+                        buttonColor = wrongRed,
                         onClick = {
-                            val navigationDest: String = Screen.WordList.route
+                            if (i < wordlist.size - 1) {
+                                i++
+                            } else {
+                                val destination = "${Screen.ScoreScreen.basePath}${scoreInside}"
+                                navController.navigate(destination) {
+                                    popUpTo(navController.graph.findStartDestination().id)
+                                    // Avoid multiple copies of the same destination when
+                                    // reselecting the same item
+                                    launchSingleTop = true
+                                }
+                            }
                         }
                     )
                     Buttons(
                         buttonText = stringResource(R.string.correct),
-                        buttonColor = Color.Green,
+                        buttonColor = correctGreen,
                         onClick = {
-                            val navigationDest: String = Screen.WordList.route
+                            if (i < wordlist.size - 1) {
+                                i++
+                                scoreInside++
+                            } else {
+                                val destination = "${Screen.ScoreScreen.basePath}${scoreInside}"
+                                navController.navigate(destination) {
+                                    popUpTo(navController.graph.findStartDestination().id)
+                                    // Avoid multiple copies of the same destination when
+                                    // reselecting the same item
+                                    launchSingleTop = true
+                                }
+                            }
                         }
                     )
                 }
@@ -186,13 +229,13 @@ fun RowScope.Buttons(
     buttonText: String,
     buttonColor: Color,
     onClick: () -> Unit
-){
+) {
     Button(
         modifier = Modifier
             .weight(1f)
             .padding(15.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor= buttonColor.copy(alpha = 0.7f),
+            containerColor = buttonColor,
         ),
         onClick = onClick
     ) {
@@ -203,13 +246,13 @@ fun RowScope.Buttons(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+/*@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlashCard(
     word: Word,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
-){
+) {
     Surface(
         modifier = modifier
             .padding(4.dp)
@@ -239,28 +282,28 @@ fun FlashCard(
             )
         }
     }
-}
+}*/
 
 
-fun getWordsAlreadyPracticed(alreadyPracticedWordsIDs: String): List<Long>{
+fun getWordsAlreadyPracticed(alreadyPracticedWordsIDs: String): List<Long> {
     val wordsAlreadyPracticed = mutableListOf<Long>()
 
-    if( alreadyPracticedWordsIDs.isNotEmpty() ){
+    if (alreadyPracticedWordsIDs.isNotEmpty()) {
 
         val wordsAlreadyPracticedIDs = alreadyPracticedWordsIDs.split("_").toTypedArray()
 
-        for(wordID in wordsAlreadyPracticedIDs){
+        for (wordID in wordsAlreadyPracticedIDs) {
             wordsAlreadyPracticed.add(wordID.toLong())
         }
     }
     return wordsAlreadyPracticed
 }
 
-fun getWordsNotPracticed(wordsList: List<Word>, wordsAlreadyPracticed: List<Long>): List<Word>{
+fun getWordsNotPracticed(wordsList: List<Word>, wordsAlreadyPracticed: List<Long>): List<Word> {
     val wordsNotPracticed = mutableListOf<Word>()
 
-    for(word in wordsList){
-        if( word.id !in wordsAlreadyPracticed ){
+    for (word in wordsList) {
+        if (word.id !in wordsAlreadyPracticed) {
             wordsNotPracticed.add(word)
         }
     }
@@ -268,16 +311,12 @@ fun getWordsNotPracticed(wordsList: List<Word>, wordsAlreadyPracticed: List<Long
 }
 
 
-
-
-
-
 @Composable
 fun FlashCardText(
     partsOfSpeech: String,
     text: String,
     isClicked: Boolean
-){
+) {
     Text(
         modifier = Modifier
             .padding(20.dp),
@@ -307,9 +346,7 @@ fun FlashCardScreenPreview() {
     MemoryWordTheme {
         FlashCardScreen(
             navController = rememberNavController(),
-            wordsList = listOf(),
-            score = 0,
-            alreadyPracticedWordsIDs = ""
+            wordsList = words1,
         )
     }
 }

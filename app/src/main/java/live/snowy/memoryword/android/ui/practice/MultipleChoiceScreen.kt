@@ -1,18 +1,14 @@
 package live.snowy.memoryword.android.ui.practice
 
 
-import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +19,7 @@ import live.snowy.memoryword.android.model.Word
 import live.snowy.memoryword.android.model.WordsViewModel
 import live.snowy.memoryword.android.model.words1
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
+
 
 @Composable
 fun MultipleChoiceScreenTopLevel(
@@ -43,6 +40,8 @@ fun MultipleChoiceScreen(
     wordsList: List<Word> = listOf(),
 ) {
     var score by remember { mutableStateOf(0) }
+    var clickable by remember { mutableStateOf(true) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -75,23 +74,28 @@ fun MultipleChoiceScreen(
                     .fillMaxWidth()
                     .padding(start = 8.dp, end = 8.dp, top = 8.dp),
             ) {
-                MakeQuestion(wordsList, score)
+                score = MakeQuestion(wordList = wordsList, clickable = clickable)
             }
         }
     }
 }
 
+
 @Composable
-fun MakeQuestion (
+fun MakeQuestion(
     wordList: List<Word> = listOf(),
-    score : Int
-) {
-    var scoreInside by remember { mutableStateOf(0) }
+    clickable: Boolean = true,
+): Int {
+    var score by remember { mutableStateOf(0) }
+    var clickable by remember { mutableStateOf(clickable) }
+    //var color by remember { mutableStateOf(Color) }
+
     val randomIDSet = mutableSetOf<Int>()
     while (randomIDSet.size < 3) randomIDSet.add((1..wordList.size).random())
     randomIDSet.add(0)
-    var List2: List<Int> = randomIDSet.toList().shuffled()
-    //List2 = List2.shuffled()
+    var shuffledWordID: List<Int> = randomIDSet.toList().shuffled()
+
+
     Surface(
         modifier = Modifier
             .fillMaxWidth(),
@@ -106,14 +110,19 @@ fun MakeQuestion (
         )
     }
     Spacer(modifier = Modifier.height(20.dp))
-    QuestionChoice(choice = wordList[0].translation,
+    QuestionChoice(
+        choice = wordList[0].translation,
         onClick = {
-            checkAnswer(
-                answer = wordList[0].word,
-                word = wordList[0]
-            )
-            scoreInside++
-        })
+            if (clickable) {
+                if(checkAnswer(answer = wordList[0].translation, word = wordList[0])) {
+                    clickable = false
+                    score++
+               }else{
+                    clickable = false
+               }
+            }
+        }
+    )
     QuestionChoice(
         choice = wordList[1].translation,
         onClick = {
@@ -139,7 +148,7 @@ fun MakeQuestion (
             )
         })
     Spacer(modifier = Modifier.height(12.dp))
-    score = scoreInside
+    return score
 }
 
 fun checkAnswer(
@@ -157,7 +166,8 @@ fun checkAnswer(
 @Composable
 fun QuestionChoice(
     choice: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    color: Color = MaterialTheme.colorScheme.background,
 ) {
     Surface(
         modifier = Modifier
@@ -166,11 +176,21 @@ fun QuestionChoice(
         shadowElevation = 3.dp,
         shape = RoundedCornerShape(11.dp),
         onClick = onClick,
+        color = color
     ) {
-        Text(
-            text = choice,
-            modifier = Modifier.padding(16.dp)
-        )
+        Row() {
+            RadioButton(
+                selected = false,
+                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(2.dp)
+            )
+            Text(
+                text = choice,
+                modifier = Modifier.padding(start = 0.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
+            )
+        }
     }
 }
 

@@ -11,10 +11,16 @@ sealed class Screen(
     object MultipleChoicePractice : Screen("MultipleChoiceTest", "")
     object FlashCardPractice : Screen("FlashCardTest", "")
     object AddEditWord : Screen("AddEditWord", "")
-    //object FlashCard : Screen("FlashCard", "")
-    //object MultipleChoice : Screen("MultipleChoice", "")
+    object NotEnoughWords : Screen("NotEnoughWords", "")
+    object ScoreScreen : Screen("ScoreScreen", "score")
 
 
+
+    fun routePath() =
+        if (argument.isEmpty())
+            route
+        else
+            "${route}/{${argument}}"
 
     val basePath = "${route}/"
 }

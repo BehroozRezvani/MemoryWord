@@ -15,20 +15,35 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import live.snowy.memoryword.android.R
+import live.snowy.memoryword.android.model.Word
+import live.snowy.memoryword.android.model.WordsViewModel
 import live.snowy.memoryword.android.ui.components.DefaultSnackbar
 import live.snowy.memoryword.android.ui.components.TopLevelScaffold
 import live.snowy.memoryword.android.ui.navigation.Screen
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 
+@Composable
+fun ChoosePracticeScreenTopLevel(
+    navController: NavHostController,
+    wordsViewModel: WordsViewModel = viewModel()
+) {
+    val wordCount = wordsViewModel.wordCount
+    ChoosePracticeScreen(
+        navController = navController,
+        wordCount = wordCount
+    )
+}
 
 @Composable
 fun ChoosePracticeScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    wordCount: Int,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -62,13 +77,19 @@ fun ChoosePracticeScreen(
                     cardName = stringResource(id = R.string.multiple_choice),
                     cardDescription = stringResource(id = R.string.multiple_choice_description),
                     onClick = {
-                        navController.navigate(Screen.MultipleChoicePractice.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                        if(wordCount < 4){
+                            navController.popBackStack()
+                            navController.navigate(Screen.NotEnoughWords.route)
+                        }else{
+                            navController.navigate(Screen.MultipleChoicePractice.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         }
-                        launchSingleTop = true
-                        restoreState = true
-                    }},
+                    },
                 )
                 PracticeCard(
                     cardName = stringResource(id = R.string.flash_card),
@@ -137,6 +158,6 @@ fun PracticeCard(
 @Composable
 fun ChoosePracticeScreenPreview() {
     MemoryWordTheme {
-        ChoosePracticeScreen(navController = rememberNavController())
+        ChoosePracticeScreen(navController = rememberNavController(), wordCount = 5)
     }
 }

@@ -11,18 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import live.snowy.memoryword.android.model.WordsViewModel
 import live.snowy.memoryword.android.ui.languageselection.LanguageSelectionScreen
 import live.snowy.memoryword.android.ui.navigation.Screen
 import live.snowy.memoryword.android.ui.onboarding.OnBoardingScreen
-import live.snowy.memoryword.android.ui.practice.ChoosePracticeScreen
-import live.snowy.memoryword.android.ui.practice.FlashCardScreen
-import live.snowy.memoryword.android.ui.practice.MultipleChoiceScreen
-import live.snowy.memoryword.android.ui.practice.MultipleChoiceScreenTopLevel
+import live.snowy.memoryword.android.ui.practice.*
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
 import live.snowy.memoryword.android.ui.wordlist.AddWordScreenTopLevel
 import live.snowy.memoryword.android.ui.wordlist.WordListScreenTopLevel
@@ -45,28 +45,28 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    /*val screen by splashViewModel.startDestination*/
-                    BuildNavigationGraph(
-                        /*startDestination = screen*/
-                    )
+                    BuildNavigationGraph( startDestination = checkOnBoardingDone())
                 }
             }
         }
     }
 }
 
+@Composable
+fun checkOnBoardingDone(editorViewModel: EditorViewModel = viewModel()): String =
+    if (editorViewModel.doneOnboardingExists()) Screen.WordList.route else Screen.OnBoarding.route
+
 
 @Composable
 private fun BuildNavigationGraph(
     wordsViewModel: WordsViewModel = viewModel(),
-    /*startDestination: String*/
+    startDestination: String
 ) {
     val navController = rememberNavController()
-    //val chosenLanguageFrom = "English"
-    //val chosenLanguageTo = "French"
-    //val databaseName = remember { mutableStateOf(chosenLanguageFrom + "_" + chosenLanguageTo) }
+    //val databaseName = remember { mutableStateOf("") }
+    val score = remember { mutableStateOf(0) }
 
-    NavHost(navController = navController, startDestination = Screen.OnBoarding.route) {
+    NavHost(navController = navController, startDestination = startDestination) {
         /*composable(
             Screen.WordList.route,
             arguments = listOf(navArgument(Screen.WordList.argument){ type = NavType.StringType })
@@ -82,7 +82,7 @@ private fun BuildNavigationGraph(
             WordListScreen(navController = navController, databaseName = "English_French")
         }*/
         composable(Screen.ChoosePractice.route) {
-            ChoosePracticeScreen(navController = navController)
+            ChoosePracticeScreenTopLevel(navController = navController)
         }
         composable(Screen.AddEditWord.route) {
             AddWordScreenTopLevel(navController = navController)
@@ -94,13 +94,41 @@ private fun BuildNavigationGraph(
             OnBoardingScreen(navController = navController)
         }
         composable(Screen.FlashCardPractice.route) {
-            FlashCardScreen(navController = navController, wordsList = listOf(), score = 0, alreadyPracticedWordsIDs = "")
+            FlashCardScreenTopLevel(navController = navController)
         }
         composable(Screen.MultipleChoicePractice.route) {
             MultipleChoiceScreenTopLevel(navController = navController)
         }
         composable(Screen.WordList.route) {
-            WordListScreenTopLevel(navController = navController, /*databaseName = "English_French"*/ wordsViewModel = wordsViewModel)
+            WordListScreenTopLevel(navController = navController)
+        }
+        /*composable(
+            Screen.WordList.route,
+            arguments = listOf(navArgument(Screen.WordList.argument){ type = NavType.StringType })
+            ) {backStackEntry ->
+            backStackEntry.arguments?.let {
+                if (it.containsKey(Screen.WordList.argument)) {
+                    databaseName.value = it.getString(Screen.WordList.argument).toString()
+                }
+                WordListScreenTopLevel(navController = navController, databaseName = databaseName.value)
+            }
+        }*/
+        composable(Screen.NotEnoughWords.route) {
+            NotEnoughWordsScreen(navController = navController)
+        }
+        /*composable(Screen.ScoreScreen.route) {
+            ScoreScreen(navController = navController, score = 0)
+        }*/
+        composable(
+            Screen.ScoreScreen.routePath(),
+            arguments = listOf(navArgument(Screen.ScoreScreen.argument){ type = NavType.IntType })
+        ) { backStackEntry ->
+            backStackEntry.arguments?.let {
+                if (it.containsKey(Screen.ScoreScreen.argument)) {
+                    score.value = (it.getInt(Screen.ScoreScreen.argument))
+                }
+                ScoreScreen(navController, score = score.value)
+            }
         }
     }
 }

@@ -17,6 +17,8 @@ class WordsViewModel(application: Application) : AndroidViewModel(application) {
     var allWords: List<Word> = repository.getAllWords()
         private set
 
+    var wordCount: Int = repository.getWordCount()
+
     fun insertWord(word: Word) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertSingleWord(word)
@@ -26,6 +28,12 @@ class WordsViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteWord(word: Word) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteSingleWord(word)
+        }
+    }
+
+    fun deleteAllWords() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllWords()
         }
     }
 }

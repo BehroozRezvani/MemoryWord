@@ -34,4 +34,12 @@
     <string name="partsOfSpeech">Parts of Speech:</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
+    <string name="not_enough_words_description">Please add more words, you need at least 4 words to try this practice</string>
+    <string name="not_enough_word">Not Enough Words</string>
+    <string name="go_to_word_list">Go to Word List Screen</string>
+    <string name="congradulation">Congradulation!</string>
+    <string name="your_score">"Your Score is: "</string>
+    <string name="end_practice">End Practice</string>
+    <string name="on_boarding_text">Welcome to Memory Word app\nThis app allows you to add words and their translation in your native language and finally be able to practice them in a fun way.</string>
+    <string name="start">Start</string>
 </resources>

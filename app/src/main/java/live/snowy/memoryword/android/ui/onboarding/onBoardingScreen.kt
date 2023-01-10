@@ -10,10 +10,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import live.snowy.memoryword.android.EditorViewModel
+import live.snowy.memoryword.android.R
 import live.snowy.memoryword.android.ui.components.Logo
 import live.snowy.memoryword.android.ui.navigation.Screen
 import live.snowy.memoryword.android.ui.theme.MemoryWordTheme
@@ -32,23 +37,28 @@ fun OnBoardingScreen(
     ) {
         Logo()
         Text(
-            text = "OnBoardingScreen",
+            text = stringResource(R.string.on_boarding_text),
+            modifier = Modifier
+                .padding(25.dp),
+            textAlign = TextAlign.Center
         )
         Button(
             onClick = {
                 /*welcomeViewModel.saveOnBoardingState(completed = true)*/
                 navController.popBackStack()
-                navController.navigate(Screen.WordList.route)
+                navController.navigate(Screen.LanguageSelection.route)
             }
         ) {
             Text(
-                text = "Start",
+                text = stringResource(R.string.start),
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(5.dp)
             )
         }
     }
 }
+
+
 
 
 

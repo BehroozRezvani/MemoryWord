@@ -34,5 +34,8 @@ interface WordDao {
     @Query("DELETE FROM words")
     fun deleteAllWords()
 
+    //get Count of the number of words in database
+    @Query("SELECT COUNT(*) FROM words")
+    fun getWordCount(): Int
 
 }

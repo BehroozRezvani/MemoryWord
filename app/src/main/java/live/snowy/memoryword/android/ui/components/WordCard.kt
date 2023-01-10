@@ -74,7 +74,7 @@ fun CardContent(
             Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier
-                    .align(Alignment.End)
+                    .align(Alignment.CenterHorizontally)
             ) {
                 Button(
                     enabled = false,
